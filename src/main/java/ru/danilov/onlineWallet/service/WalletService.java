@@ -1,6 +1,8 @@
 package ru.danilov.onlineWallet.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.danilov.onlineWallet.exceptions.WalletNotFoundException;
@@ -52,20 +54,29 @@ public class WalletService {
     }
 
     @Transactional
-    public void updateWalletsAmount(Wallet updateWallet, int walletId) {
+    public ResponseEntity<HttpStatus> updateWalletsAmount(Wallet updateWallet, int walletId) {
         Wallet walletById = getWalletById(walletId);
         boolean equals = updateWallet.getOperation().equals(Operation.MINUS);
         if (equals) {
             int newAmount = walletById.getAmount() - updateWallet.getAmount();
             if (newAmount < 0) {
-                throw new WalletNotUpdateException("Запршенная к снятию сумма превышает лимит кошелька");
+                throw new WalletNotUpdateException("Запрошенная к снятию сумма превышает лимит кошелька");
             } else {
                 walletById.setAmount(walletById.getAmount() - updateWallet.getAmount());
                 walletRepository.save(walletById);
+                return ResponseEntity.ok(HttpStatus.OK);
             }
         } else {
             walletById.setAmount(walletById.getAmount() + updateWallet.getAmount());
             walletRepository.save(walletById);
+            return ResponseEntity.ok(HttpStatus.OK);
         }
+    }
+
+    @Transactional
+    public ResponseEntity<HttpStatus> deleteWallet(int walletId) {
+        getWalletByClientId(walletId);
+        walletRepository.deleteById(walletId);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }
