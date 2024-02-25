@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/wallet")
 public class WalletController {
-
     private final WalletService walletService;
     private final ModelMapper modelMapper;
 

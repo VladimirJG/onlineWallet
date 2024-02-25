@@ -46,7 +46,7 @@ public class ClientsController {
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<HttpStatus> createSensor(@RequestBody @Valid ClientDto clientDto, BindingResult bindingResult) {
+    public ResponseEntity<HttpStatus> create(@RequestBody @Valid ClientDto clientDto, BindingResult bindingResult) {
         Client client = convertToClient(clientDto);
         clientValidator.validate(client, bindingResult);
         if (bindingResult.hasErrors()) {

@@ -10,5 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class WalletDto {
+    private int id;
     private int amount;
 }
