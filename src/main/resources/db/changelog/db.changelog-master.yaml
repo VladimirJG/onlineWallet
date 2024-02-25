@@ -1,0 +1,121 @@
+databaseChangeLog:
+  - logicalFilePath: db/changelog/db.changelog-CreateTables.yaml
+  - changeSet:
+      id: 1
+      author: Danilov V.
+      changes:
+        - createTable:
+            tableName: client
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: password
+                  type: bigint
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: wallet
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: amount
+                  type: int
+              - column:
+                  name: client_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_client_id
+                    references: client(id)
+                    deleteCascade: true
+  - changeSet:
+      id: 2
+      author: Danilov V.
+      comment: "Insert Data to Tables"
+      changes:
+        - insert:
+            tableName: client
+            columns:
+              - column:
+                  name: name
+                  value: "Margo"
+              - column:
+                  name: password
+                  valueNumeric: "1981"
+        - insert:
+            tableName: client
+            columns:
+              - column:
+                  name: name
+                  value: "Miron"
+              - column:
+                  name: password
+                  valueNumeric: "2019"
+        - insert:
+            tableName: client
+            columns:
+              - column:
+                  name: name
+                  value: "Alena"
+              - column:
+                  name: password
+                  valueNumeric: "2020"
+        - insert:
+            tableName: wallet
+            columns:
+              - column:
+                  name: amount
+                  valueNumeric: "1000"
+              - column:
+                  name: client_id
+                  valueNumeric: "1"
+        - insert:
+            tableName: wallet
+            columns:
+              - column:
+                  name: amount
+                  valueNumeric: "250"
+              - column:
+                  name: client_id
+                  valueNumeric: "1"
+        - insert:
+            tableName: wallet
+            columns:
+              - column:
+                  name: amount
+                  valueNumeric: "1000"
+              - column:
+                  name: client_id
+                  valueNumeric: "2"
+        - insert:
+            tableName: wallet
+            columns:
+              - column:
+                  name: amount
+                  valueNumeric: "1000"
+              - column:
+                  name: client_id
+                  valueNumeric: "3"
+      rollback:
+        - delete:
+            tableName: wallet
+        - delete:
+            tableName: client
