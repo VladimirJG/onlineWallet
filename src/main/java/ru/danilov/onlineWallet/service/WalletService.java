@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.danilov.onlineWallet.exceptions.WalletNotFoundException;
 import ru.danilov.onlineWallet.exceptions.WalletNotUpdateException;
@@ -53,9 +55,10 @@ public class WalletService {
         walletRepository.save(wallet);
     }
 
-    @Transactional
+    @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW)
     public ResponseEntity<HttpStatus> updateWalletsAmount(Wallet updateWallet, int walletId) {
-        Wallet walletById = getWalletById(walletId);
+
+        Wallet walletById = walletRepository.findWalletById(walletId).orElseThrow(WalletNotFoundException::new);
         boolean equals = updateWallet.getOperation().equals(Operation.MINUS);
         if (equals) {
             int newAmount = walletById.getAmount() - updateWallet.getAmount();

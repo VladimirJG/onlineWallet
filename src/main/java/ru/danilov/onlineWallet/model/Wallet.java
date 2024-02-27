@@ -25,4 +25,14 @@ public class Wallet {
     @Transient
     @Enumerated(EnumType.STRING)
     private Operation operation;
+   /* @Transient
+    @Version
+    private int version;
+
+    public Wallet(int id, int amount, Client owner, Operation operation) {
+        this.id = id;
+        this.amount = amount;
+        this.owner = owner;
+        this.operation = operation;
+    }*/
 }
